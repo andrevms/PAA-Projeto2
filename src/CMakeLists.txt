@@ -11,10 +11,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_executable(
     PAA-Projeto2
     utils/container.cpp utils/container.hpp
+    algorithms/menorCaminho.cpp
+
     main.cpp
 )
 
 target_include_directories(
     PAA-Projeto2
-    PRIVATE utils/entity libs/algorithms
+    PRIVATE utils/ algorithms/
     )
