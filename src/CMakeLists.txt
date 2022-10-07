@@ -10,7 +10,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # add the executable
 add_executable(
     PAA-Projeto2
-   
+    utils/container.cpp utils/container.hpp
     main.cpp
 )
 
+target_include_directories(
+    PAA-Projeto2
+    PRIVATE utils/entity libs/algorithms
+    )
