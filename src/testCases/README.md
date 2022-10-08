@@ -1,28 +1,21 @@
-Template
+NumeroDeCidades NumeroDeCarros ValorDaCotaMinima (Template) 
 
-NumeroDeCidades NumeroDeCarros
+0 0 0 0 0 (VetorBonus) 
 
-VetorBonus
-0 0 0 0 0
-
-VetorPenalidade
-0 0 0 0 0
-
-Carro1
-0 0 0 0 0
+0 0 0 0 0  (Carro1)
 0 0 0 0 0
 0 0 0 0 0
 0 0 0 0 0
 0 0 0 0 0
 
-Carro2
-0 0 0 0 0
+0 0 0 0 0  (Carro2)
 0 0 0 0 0
 0 0 0 0 0
 0 0 0 0 0
 0 0 0 0 0
 
-
+Anotações
+-----------------------------------------------------
 alcançar bonus de 50  
 total           25 75 50 45 65
 
