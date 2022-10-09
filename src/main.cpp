@@ -1,5 +1,6 @@
 #include <iostream>
 #include <container.hpp>
+#include <climits>
 #include "shortestPath.hpp"
 using namespace std;
 
@@ -7,12 +8,88 @@ int main(int argc, char *argv[]) {
   Container a = Container();
   a.loadInfo(argv[1]);
   // a.imprimir();
-  bool* visited = new bool[5]{false};
-  list<int> b = Dijkstra(0,4,a.numCidades,a.matrizAdjacente[0], visited);
-  // list<int>::iterator it;
-  // for (it = b.begin(); it != b.end(); ++it){
-  //   cout<<*it<<" -> ";
-  // }
-  cout << "\nHello World!";
+
+  bool* visited = new bool[a.numCidades];
+  int* orderedNodes = new int[a.numCidades];
+  int quota=0;
+  int used_car;
+  int* best_run;
+  int best_run_size;
+  int best_run_cost;
+  for (int i = 0; i < a.numCidades; i++){
+    visited[i]=false;
+    orderedNodes[i] = i;
+  }
+  //ordenando as cidades por bonus com insertion sort
+  for (int i = 1; i < a.numCidades; i++){
+    int j = i-1;
+    while (j >= 0 && a.bonus[orderedNodes[j]] < a.bonus[i]) {
+      orderedNodes[j + 1] = orderedNodes[j];
+      j--;
+    }
+    orderedNodes[j+1] = i;
+  }
+  //definindo node inicial como o com maior bonus
+  int start=orderedNodes[0];
+
+  // quota+=a.bonus[start];
+  visited[start] = true;
+  // solution[0]=start;
+  // visited_counter++;
+
+  while (quota<a.cotaMinima){
+    int target;
+    //procurando o proximo node de maior bonus para definir como alvo
+    for (int j = 1; j < a.numCidades; j++){
+      if(!visited[orderedNodes[j]]){
+        target = orderedNodes[j];
+        break;
+      }
+    }
+
+    for (int i = 0; i < a.numCarros; i++){
+      //encontrando o caminho mais proximo ao alvo na matriz i
+      int* current_run = Dijkstra(start,target,a.numCidades,a.matrizAdjacente[i],visited);
+      int path_size = sizeof(current_run)/sizeof(int);
+      
+      int current_run_cost=0;
+      int t=target;
+      //calculando o custo da corrida na matriz i
+      for(int j=0;j<path_size-1;j++){
+        current_run_cost+=a.matrizAdjacente[i][current_run[j]][current_run[j+1]];
+        //cout<<a.matrizAdjacente[i][current_run[j]][current_run[j+1]]<<"\n";
+      }
+      //se a corrida nessa matriz for melhor que nas outras, ou nao houver corrida registrada,
+      //definir a melhor corrida como o resultado
+      if(i==0||best_run_cost>current_run_cost){
+        used_car=i;
+        best_run = current_run;
+        best_run_size = path_size;
+        best_run_cost = current_run_cost;
+      }
+      //-v
+    }
+    //---IMPLEMENTAR
+    //estando definida a melhor corrida, adiciona-la à solução e marcar seus vértices como visitados
+    
+    //melhor corrida
+    for (int n = 0; n < best_run_size; n++) cout<<best_run[n]<<" ";
+    cout<<"   "<<best_run_size<<"   "<<best_run_cost<<"\n";
+
+    for (int i = 0; i < best_run_size; i++){
+      quota+=a.bonus[best_run[i]];
+      visited[best_run[i]] = true;
+    }
+    start=target;
+    delete[] best_run;
+    best_run_size=INT_MAX;
+    best_run_cost=INT_MAX;
+  }
+  // for (int i = 0; i < a.numCidades+1; i++) cout<<solution[i]<<endl;
+  int* b = Dijkstra(0,2,a.numCidades,a.matrizAdjacente[0], visited);
+  for (int i=0; i<a.numCidades; i++){
+    cout<<b[i]<<" -> ";
+  }
+  //cout << "\nHello World!";
   return 0;
 }
