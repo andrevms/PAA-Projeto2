@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_executable(
     PAA-Projeto2
     utils/container.cpp utils/container.hpp
-    algorithms/menorCaminho.cpp
+    algorithms/shortestPath.cpp algorithms/shortestPath.hpp
 
     main.cpp
 )
