@@ -6,7 +6,7 @@
 //size: o tamanho da matriz
 //mat: a matriz a ser usada (dimensoes = size*size)
 //visited_in_earlier_runs: a lista com todos os nos visitados e nao visitados da matriz (tamanho = size)
-std::list<int> Dijkstra(int start, int target, int size, int** mat, bool* visited_in_earlier_runs){
+int* Dijkstra(int start, int target, int size, int** mat, bool* visited_in_earlier_runs){
     int current=start;
     bool* visited_in_current_run = new bool[size];
     /*inicializando a lista de vértices visitados na iteração atual de
@@ -55,12 +55,21 @@ std::list<int> Dijkstra(int start, int target, int size, int** mat, bool* visite
         }
     }
     int i=target;
-    std::list<int> result;
-    result.push_front(target);
+    std::list<int> path;
+    path.push_front(target);
     while (i != start)
     {
-        result.push_front(predecessor[i]);
+        path.push_front(predecessor[i]);
         i=predecessor[i];
+    }
+    int* result = new int[path.size()];
+    // std::cout<<path.size()<<"\n";
+    int path_size=path.size();
+    for (int i = 0; i < path_size; i++)
+    {
+        result[i]=path.front();
+        path.pop_front();
+        // std::cout<<result[i]<<" ";
     }
     return result;
 };
