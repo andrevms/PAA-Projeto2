@@ -4,19 +4,22 @@
 ShortestPathTest::ShortestPathTest(){}
 ShortestPathTest::~ShortestPathTest(){}
 
+void ShortestPathTest::toStringVetor(int* vetor, int size) {
+  for (size_t i = 0; i < size; i++)
+  {
+        std::cout << vetor[i] << " ";
+  }
+}
+
 void ShortestPathTest::shortestPathComMatriz5x5() {
-
-    int start = 0;
-    int target = 4;
+  std::cout << "Teste00 shortestPathComMatriz5x5\n";
+    
     int size = 5;
-    bool nodesVisitados[5] = {0,0,0,0,0};
-
     int** matrizAdjacente = new int *[size];
     for (size_t i = 0; i < size; i++)
     {
       matrizAdjacente[i] = new int [size];
     }
-
     for (size_t i = 0; i < size; i++)
     {
       for (size_t j = 0; j < size; j++)
@@ -34,22 +37,32 @@ void ShortestPathTest::shortestPathComMatriz5x5() {
     3 4 5 6 7
     4 5 6 7 8
 */
-    int* dijkstra = Dijkstra(start, target, size, matrizAdjacente, nodesVisitados);
-    int valorEsperado[2] = {0,4};
+    int start = 0;
+    int target = 4;
+    bool nodesVisitados[] = {0,0,0,0,0};
 
-    std::cout << "Dijkstra ";
-    for (size_t i = 0; i < (sizeof(dijkstra)/sizeof(int)); i++)
-    {
-        std::cout << dijkstra[i] << " ";
-    }
-    
+    int* dijkstra = Dijkstra(start, target, size, matrizAdjacente, nodesVisitados);
+    int sizeVetorEsperado = 2;
+    int valorEsperado[] = {0,4};
+
+    std::cout << "Dijkstra Recebido ";
+    toStringVetor(dijkstra, (sizeof(dijkstra)/sizeof(int)));
+   
+    std::cout << "\nValor esperado ";
+    toStringVetor(valorEsperado, sizeVetorEsperado);
+
     
     // Asserts
-    if (! (dijkstra[1] == valorEsperado[0])) { 
-        std::cout << "ERRO";
+    bool flag = false;
+    std::cout << "\n";
+    for (size_t i = 0; i < sizeVetorEsperado; i++)
+    {
+      if (! (dijkstra[i] == valorEsperado[i])) { 
+        std::cout << "Erro dijkstra[" << i << "] != valorEsperado[i]\n";
+        flag = true;
+      }
     }
-
-    if (! (dijkstra[0] == valorEsperado[1])){
-        std::cout << "ERRO2";
-    }
+    
+    assert(flag == false);
+    
 }

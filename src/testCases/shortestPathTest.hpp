@@ -4,7 +4,9 @@
 #include <iostream>
 #include <climits>
 #include <cassert>
+#include <assert.h>
 #include "shortestPath.hpp"
+
 
 
 class ShortestPathTest { 
@@ -12,6 +14,7 @@ class ShortestPathTest {
     ShortestPathTest();
     ~ShortestPathTest();
     void shortestPathComMatriz5x5();
+    void toStringVetor(int* vetor, int size);
 };
 
 #endif
