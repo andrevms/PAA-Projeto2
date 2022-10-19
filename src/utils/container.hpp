@@ -12,10 +12,8 @@
 using namespace std;
 
 class Container { 
-  public:
-    string fileName;             
+  public:            
     int numCidades;
-    int numCarros;
     int cotaMinima;
     int*** matrizAdjacente;
     int* bonus;

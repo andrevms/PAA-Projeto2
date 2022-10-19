@@ -4,7 +4,7 @@ Container::Container() {}
 Container::~Container() {}
 void Container::loadInfo(string caminho)
 {
-
+/*
   ifstream myfile;
   myfile.open(caminho);
   if (myfile.is_open())
@@ -63,11 +63,13 @@ void Container::loadInfo(string caminho)
     }
   }
   else
-    cout << "Unable to open file";
+    cout << "Unable to open file";*/
 }
+
+
 void Container::imprimir()
 {
-  cout << numCidades << ' ' << numCarros << ' ' << cotaMinima << '\n'
+  cout << numCidades << ' ' << ' ' << cotaMinima << '\n'
        << bonus[0] << ' '
        << bonus[1] << ' '
        << bonus[2] << ' '
@@ -75,16 +77,15 @@ void Container::imprimir()
        << bonus[4] << '\n'
        << '\n';
 
-   for (size_t w = 0; w < numCarros; w++)
-   {
-      for (size_t i = 0; i < numCidades; i++)
+  
+    for (size_t i = 0; i < numCidades; i++)
+    {
+      for (size_t j = 0; j < numCidades; j++)
       {
-        for (size_t j = 0; j < numCidades; j++)
-        {
-          cout << matrizAdjacente[w][i][j] << ' ';
-        }
-        cout << '\n';
+        cout << matrizAdjacente[i][j] << ' ';
       }
       cout << '\n';
     }
+    cout << '\n';
+  
 }

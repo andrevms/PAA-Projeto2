@@ -2,11 +2,14 @@
 #include <container.hpp>
 #include <climits>
 #include "shortestPath.hpp"
+#include "shortestPathTest.hpp"
+
 using namespace std;
 
 int main(int argc, char *argv[])
 {
- 
+  ShortestPathTest a = ShortestPathTest();
+  a.shortestPathComMatriz5x5();
 }
 
 

@@ -13,10 +13,11 @@ add_executable(
     utils/container.cpp utils/container.hpp
     algorithms/shortestPath.cpp algorithms/shortestPath.hpp
 
+    testCases/shortestPathTest.cpp testCases/shortestPathTest.hpp
     main.cpp
 )
 
 target_include_directories(
     PAA-Projeto2
-    PRIVATE utils/ algorithms/
+    PRIVATE utils/ algorithms/ testCases/
     )
