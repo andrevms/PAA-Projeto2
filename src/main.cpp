@@ -6,7 +6,12 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-  Container a = Container();
+ 
+}
+
+
+/*
+ Container a = Container();
   a.loadInfo(argv[1]);
   // a.imprimir();
 
@@ -129,4 +134,4 @@ int main(int argc, char *argv[])
   
 
   return 0;
-}
+*/
