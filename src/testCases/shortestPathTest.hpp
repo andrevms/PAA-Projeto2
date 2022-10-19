@@ -4,8 +4,6 @@
 #include <iostream>
 #include <climits>
 #include <cassert>
-#include <assert.h>
-#include <crtdbg.h>
 #include "shortestPath.hpp"
 
 

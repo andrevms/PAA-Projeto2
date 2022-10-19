@@ -43,7 +43,13 @@ void ShortestPathTest::shortestPathComMatriz5x5() {
         std::cout << dijkstra[i] << " ";
     }
     
-    _ASSERT_EXPR(dijkstra[0] == valorEsperado[1], " Teste1");
-    assert(dijkstra[0] == valorEsperado[0]);
-    assert(dijkstra[1] == valorEsperado[1]);
+    
+    // Asserts
+    if (! (dijkstra[1] == valorEsperado[0])) { 
+        std::cout << "ERRO";
+    }
+
+    if (! (dijkstra[0] == valorEsperado[1])){
+        std::cout << "ERRO2";
+    }
 }
