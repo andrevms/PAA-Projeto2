@@ -3,13 +3,20 @@
 #include <climits>
 #include "shortestPath.hpp"
 #include "shortestPathTest.hpp"
+#include "backtraking.hpp"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
-  ShortestPathTest a = ShortestPathTest();
-  a.shortestPathComMatriz5x5();
+  Container a = Container();
+  a.loadInfo(argv[1]);
+  a.imprimir();
+
+  backtraking(a);
+  
+  //ShortestPathTest a = ShortestPathTest();
+  //a.shortestPathComMatriz5x5();
 }
 
 

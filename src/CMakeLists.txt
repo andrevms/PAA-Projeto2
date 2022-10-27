@@ -12,7 +12,8 @@ add_executable(
     PAA-Projeto2
     utils/container.cpp utils/container.hpp
     algorithms/shortestPath.cpp algorithms/shortestPath.hpp
-
+    algorithms/backtraking.cpp algorithms/backtraking.hpp
+    
     testCases/shortestPathTest.cpp testCases/shortestPathTest.hpp
     main.cpp
 )

@@ -15,7 +15,7 @@ class Container {
   public:            
     int numCidades;
     int cotaMinima;
-    int*** matrizAdjacente;
+    int** matrizAdjacente;
     int* bonus;
     Container();
     ~Container();
