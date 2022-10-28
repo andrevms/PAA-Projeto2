@@ -14,7 +14,6 @@ void backtraking(Container container)
 
 void backtraking(Container container, int *caminho)
 {
-
     int size = 0;
     for (size_t i = 0; i < container.numCidades; i++)
     {
@@ -24,28 +23,27 @@ void backtraking(Container container, int *caminho)
         }
     }
 
-    std::cout << "Size Atual igual a " << size << "\n";
     std::cout << "Caminho : ";
     for (size_t i = 0; i < size; i++)
     {
         std::cout << caminho[i] << " ";
     }
-       
+       std::cout << "\n";
     if (accept(container, caminho, size))
     {
-        std::cout << " Caminho Aceito\n\n";
+        //std::cout << " Caminho Aceito\n\n";
     }else {
-        std::cout << " Caminho Rejeitado\n\n";
+        //std::cout << " Caminho Rejeitado\n\n";
     }
 
     if (size == container.numCidades)
     {
-        std::cout << "Caminho terminado - Size Atual igual o numCidades - Mudar de folha --> size : " << size << "\n";
+        //std::cout << "Caminho terminado - Size Atual igual o numCidades - Mudar de folha --> size : " << size << "\n";
         return;
     }
     
     int *s = first(container, caminho, size);
-    
+
     while (s != nullptr)
     {
         backtraking(container, s);
@@ -84,6 +82,7 @@ int *first(Container container, int *caminho, int size)
         return entradas;
     }
 
+    
     //Caso em que ja exista entradas no caminho
     //Cria array auxiliar com entradas, colocando 1 como valor existente no array
     for (size_t i = 0; i < size; i++)
@@ -97,7 +96,7 @@ int *first(Container container, int *caminho, int size)
         if (entradas[i] == -1)
         {
             int *novoCaminho = new int[container.numCidades];
-            for (size_t i = 0; i < container.numCidades; i++){ novoCaminho[i] = caminho[i]; }
+            for (size_t j = 0; j < container.numCidades; j++){ novoCaminho[j] = caminho[j]; }
             novoCaminho[size] = i;
             return novoCaminho;
         }
@@ -124,7 +123,7 @@ int *next(Container container, int *caminho)
     }
 
     //Como é caixeiro viajante sempre se inicia no 0
-    if(size == 1){
+    if(size == 1) {
         return nullptr;
     }
 
@@ -132,6 +131,12 @@ int *next(Container container, int *caminho)
     if(size == container.numCidades ) {
         return nullptr;
     }
+
+    //Caso em que não tem mais next
+    if(caminho[size-1] == container.numCidades-1) {
+        return nullptr;
+    }
+
     //Com mais de 1 elemento
     //Troca a ultima cidade pela proxima cidade a direita disponivel
     int *entradas = new int[container.numCidades];
@@ -148,11 +153,16 @@ int *next(Container container, int *caminho)
     //ultimoElemento é a ultima cidade que foi selecionada
     int ultimoElemento = caminho[size-1];
 
-    int flag = 0;
-    while (entradas[ultimoElemento] != -1)
+    while (entradas[ultimoElemento] != -1 && ultimoElemento < container.numCidades)
     {
         ultimoElemento++;
     }
+
+    if (ultimoElemento == container.numCidades)
+    {
+        return nullptr;
+    }
+    
 
     //Cria novo caminho com ultimoElemento encontrado como ultimo Valor
     int *novoCaminho = new int[container.numCidades];
