@@ -1,8 +1,11 @@
 #include "backtraking.hpp"
 
+int* caminhoIdeal;
+int valorDoMelhorCaminho = -1;
+int sizeMelhorCaminho = -1;
+
 void backtraking(Container container)
 {
-
     int *caminho = new int[container.numCidades];
     for (size_t i = 0; i < container.numCidades; i++)
     {
@@ -23,12 +26,6 @@ void backtraking(Container container, int *caminho)
         }
     }
 
-    std::cout << "Caminho : ";
-    for (size_t i = 0; i < size; i++)
-    {
-        std::cout << caminho[i] << " ";
-    }
-       std::cout << "\n";
     if (accept(container, caminho, size))
     {
         //std::cout << " Caminho Aceito\n\n";
@@ -55,13 +52,33 @@ bool accept(Container container, int *caminho, int size)
 {
 
     int cotaDoCaminho = 0;
+    int valorDoCaminho = 0;
     for (size_t i = 0; i < size; i++)
     {
+        valorDoCaminho += container.matrizAdjacente[caminho[i]][caminho[i+1]];
         cotaDoCaminho += container.bonus[i];
     }
 
+    //Voltar para o node Inicial
+    valorDoCaminho += container.matrizAdjacente[caminho[size-1]][caminho[0]];
+
     if (cotaDoCaminho >= container.cotaMinima)
     {
+        if (valorDoMelhorCaminho < 0 || valorDoMelhorCaminho > valorDoCaminho)
+        {
+            valorDoMelhorCaminho = valorDoCaminho;
+            int* best = new int[size+1];
+            for (size_t i = 0; i < size; i++)
+            {
+                best[i] = caminho[i];
+            }
+            best[size] = 0;
+            sizeMelhorCaminho = size+1;
+            caminhoIdeal = best;
+        }
+
+        
+        
         return true;
     }
 
@@ -174,4 +191,14 @@ int *next(Container container, int *caminho)
     novoCaminho[size-1] = ultimoElemento;
 
     return novoCaminho;
+}
+
+
+void printOutput(Container container){
+    std::cout << "Melhor Caminho: valor [" << valorDoMelhorCaminho << "] : [ ";
+    for (size_t i = 0; i < sizeMelhorCaminho; i++)
+    {
+        std::cout << caminhoIdeal[i] << " ";
+    }
+    std::cout << "]\n";
 }

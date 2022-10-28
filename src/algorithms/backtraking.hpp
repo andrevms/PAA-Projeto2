@@ -9,5 +9,6 @@ void backtraking(Container container, int* caminho);
 bool accept(Container container, int *caminho, int size);
 int* first(Container container, int* caminho, int size);
 int* next(Container container, int* caminho);
+void printOutput(Container container);
 int* output();
 #endif

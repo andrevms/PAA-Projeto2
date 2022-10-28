@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
   a.imprimir();
 
   backtraking(a);
+  printOutput(a);
   
   //ShortestPathTest a = ShortestPathTest();
   //a.shortestPathComMatriz5x5();
