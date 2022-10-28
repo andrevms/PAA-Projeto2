@@ -1,148 +1,167 @@
 #include "backtraking.hpp"
 
-void backtraking(Container container) {
+void backtraking(Container container)
+{
 
     int *caminho = new int[container.numCidades];
     for (size_t i = 0; i < container.numCidades; i++)
     {
         caminho[i] = -1;
     }
-    
-    std::cout <<"numCidades "<< container.numCidades <<"\nSizeofCaminho " << (sizeof(caminho)) << "\n";
-   backtraking(container, caminho);
+
+    backtraking(container, caminho);
 }
 
-void backtraking(Container container,int *caminho) {
+void backtraking(Container container, int *caminho)
+{
 
-    std::cout << "It 1 \n " << (sizeof(caminho)/sizeof(int)) << " " << caminho[1] << "\n";
-
-    if (reject(container, caminho)) {
-        std::cout << "Caminho Rejeitado ";
-        for (size_t i = 0; i < (sizeof(caminho)/sizeof(int)); i++)
+    int size = 0;
+    for (size_t i = 0; i < container.numCidades; i++)
+    {
+        if (caminho[i] != -1)
         {
-            std::cout << caminho[i] << " ";
-            
+            size++;
         }
-        std::cout << "\n";
+    }
+
+    std::cout << "Size Atual igual a " << size << "\n";
+    std::cout << "Caminho : ";
+    for (size_t i = 0; i < size; i++)
+    {
+        std::cout << caminho[i] << " ";
+    }
+       
+    if (accept(container, caminho, size))
+    {
+        std::cout << " Caminho Aceito\n\n";
+    }else {
+        std::cout << " Caminho Rejeitado\n\n";
+    }
+
+    if (size == container.numCidades)
+    {
+        std::cout << "Caminho terminado - Size Atual igual o numCidades - Mudar de folha --> size : " << size << "\n";
         return;
     }
-
-    if( accept(container, caminho)) {
-        std::cout << "Caminho Aceito ";
-        for (size_t i = 0; i < (sizeof(caminho)/sizeof(int)); i++)
-        {
-            std::cout << caminho[i] << " ";
-            
-        }
-        std::cout << "\n";
-    }
-
-
-    int *s = new int[container.numCidades];
-    s = first(container, caminho);
-
-    while (s != NULL )
+    
+    int *s = first(container, caminho, size);
+    
+    while (s != nullptr)
     {
         backtraking(container, s);
         s = next(container, s);
     }
-    
-
 }
-/*
-s ← first(P, c)
-    while s ≠ NULL do
-        backtrack(P, s)
-        s ← next(P, s)
-*/
 
-bool reject(Container container, int* caminho) {
+bool accept(Container container, int *caminho, int size)
+{
+
     int cotaDoCaminho = 0;
-    for (size_t i = 0; i < (sizeof(caminho)/sizeof(int)); i++)
+    for (size_t i = 0; i < size; i++)
     {
         cotaDoCaminho += container.bonus[i];
     }
-    
-    if ( cotaDoCaminho >= container.cotaMinima) {
-        return false;
-    }
 
-    return true;
-}
-
-bool accept(Container container, int* caminho) {
-
-    int cotaDoCaminho = 0;
-    for (size_t i = 0; i < (sizeof(caminho)/sizeof(int)); i++)
+    if (cotaDoCaminho >= container.cotaMinima)
     {
-        cotaDoCaminho += container.bonus[i];
-    }
-    
-    if ( cotaDoCaminho >= container.cotaMinima) {
         return true;
     }
 
     return false;
 }
 
-
-int* first(Container container, int* caminho) {
-
-
-    int numEntradas = container.numCidades;
-    int* entradas = new int [numEntradas];
-
-    for (size_t i = 0; i < numEntradas; i++)
+int *first(Container container, int *caminho, int size)
+{
+    int *entradas = new int[container.numCidades];
+    for (size_t i = 0; i < container.numCidades; i++)
     {
-        entradas[i] = 0;
-    }
-    
-    int proximaEntrada = 0;
-    for (size_t i = 0; i < (sizeof(caminho)/sizeof(int)); i++)
-    {
-        entradas[caminho[i]] = 1; 
+        entradas[i] = -1;
     }
 
-   for (size_t i = 0; i < numEntradas; i++)
+    //Caso seja o root
+    if(size == 0) {
+        entradas[0] = 0;
+        return entradas;
+    }
+
+    //Caso em que ja exista entradas no caminho
+    //Cria array auxiliar com entradas, colocando 1 como valor existente no array
+    for (size_t i = 0; i < size; i++)
     {
-        if(entradas[i] == 0){
-            proximaEntrada = i;
-            break;
+        entradas[caminho[i]] = 1;
+    }
+
+    //Proxima entrada recebe o valor do primeiro numero disponivel varendo da esquerda para direita
+    for (size_t i = 0; i < container.numCidades; i++)
+    {
+        if (entradas[i] == -1)
+        {
+            int *novoCaminho = new int[container.numCidades];
+            for (size_t i = 0; i < container.numCidades; i++){ novoCaminho[i] = caminho[i]; }
+            novoCaminho[size] = i;
+            return novoCaminho;
         }
     }
-    
 
-    caminho[(sizeof(caminho)/sizeof(int))+ 1 ] = proximaEntrada;
-    
-    return caminho;
+    //Se não encontrar nenhuma entrada a direita retorna nullptr
+    return nullptr;
 }
 
-
-int* next(Container container, int* caminho) {
-
-    int numEntradas = container.numCidades;
-    int* entradas = new int [numEntradas];
-
-    for (size_t i = 0; i < numEntradas; i++)
+int *next(Container container, int *caminho)
+{
+    int size = 0;
+    for (size_t i = 0; i < container.numCidades; i++)
     {
-        entradas[i] = 0;
+        if (caminho[i] != -1)
+        {
+            size++;
+        }
     }
-    
-    int proximaEntrada = 0;
-    for (size_t i = 0; i < (sizeof(caminho)/sizeof(int)); i++)
+
+    if(size == 0 ) {
+        std::cerr << "ERRO NEXT --> SIZE = 0";
+        exit(-1);
+    }
+
+    //Como é caixeiro viajante sempre se inicia no 0
+    if(size == 1){
+        return nullptr;
+    }
+
+    //Caso em que não tem mais next
+    if(size == container.numCidades ) {
+        return nullptr;
+    }
+    //Com mais de 1 elemento
+    //Troca a ultima cidade pela proxima cidade a direita disponivel
+    int *entradas = new int[container.numCidades];
+    for (size_t i = 0; i < container.numCidades; i++)
     {
-        entradas[caminho[i]] = 1; 
+        entradas[i] = -1;
     }
 
-    int i = caminho[(sizeof(caminho)/sizeof(int)) -1];
-    while(entradas[caminho[i]] != 0 ){
-        i++;
-    }   
-
-    if( i >= numEntradas){
-        return NULL;
+    for (size_t i = 0; i < size; i++)
+    {
+        entradas[caminho[i]] = 1;
     }
-    caminho[(sizeof(caminho)/sizeof(int))+ 1 ] = i;
-    
-    return caminho;
+
+    //ultimoElemento é a ultima cidade que foi selecionada
+    int ultimoElemento = caminho[size-1];
+
+    int flag = 0;
+    while (entradas[ultimoElemento] != -1)
+    {
+        ultimoElemento++;
+    }
+
+    //Cria novo caminho com ultimoElemento encontrado como ultimo Valor
+    int *novoCaminho = new int[container.numCidades];
+    for (size_t i = 0; i < container.numCidades; i++)
+    {
+        novoCaminho[i] = caminho[i];
+    }
+
+    novoCaminho[size-1] = ultimoElemento;
+
+    return novoCaminho;
 }

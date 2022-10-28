@@ -6,9 +6,8 @@
 
 void backtraking(Container container);
 void backtraking(Container container, int* caminho);
-bool reject(Container container, int* caminho);
-bool accept(Container container, int *caminho);
-int* first(Container container, int* caminho);
+bool accept(Container container, int *caminho, int size);
+int* first(Container container, int* caminho, int size);
 int* next(Container container, int* caminho);
 int* output();
 #endif
