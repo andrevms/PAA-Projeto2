@@ -1,6 +1,8 @@
 #include <iostream>
 #include <container.hpp>
 #include <climits>
+#include <chrono>
+#include <ctime>
 #include "shortestPath.hpp"
 #include "shortestPathTest.hpp"
 #include "backtraking.hpp"
@@ -9,12 +11,33 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+  auto start = chrono::steady_clock::now();
   Container a = Container();
   a.loadInfo(argv[1]);
   a.imprimir();
 
   backtraking(a);
+
+  auto end = chrono::steady_clock::now();
   printOutput(a);
+
+   cout << "Elapsed time in nanoseconds: "
+        << chrono::duration_cast<chrono::nanoseconds>(end - start).count()
+        << " ns" << endl;
+ 
+    cout << "Elapsed time in microseconds: "
+        << chrono::duration_cast<chrono::microseconds>(end - start).count()
+        << " µs" << endl;
+ 
+    cout << "Elapsed time in milliseconds: "
+        << chrono::duration_cast<chrono::milliseconds>(end - start).count()
+        << " ms" << endl;
+ 
+    cout << "Elapsed time in seconds: "
+        << chrono::duration_cast<chrono::seconds>(end - start).count()
+        << " sec\n";
+
+  
   
   //ShortestPathTest a = ShortestPathTest();
   //a.shortestPathComMatriz5x5();
