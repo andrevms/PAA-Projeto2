@@ -177,7 +177,7 @@ int *next(Container container, int *caminho)
     //ultimoElemento é a ultima cidade que foi selecionada
     int ultimoElemento = caminho[size-1];
 
-    while (entradas[ultimoElemento] != -1 && ultimoElemento < container.numCidades)
+    while (ultimoElemento < container.numCidades && entradas[ultimoElemento] != -1)
     {
         ultimoElemento++;
     }
