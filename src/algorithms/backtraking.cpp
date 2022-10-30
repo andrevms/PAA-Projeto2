@@ -3,6 +3,7 @@
 int* caminhoIdeal;
 int valorDoMelhorCaminho = -1;
 int sizeMelhorCaminho = -1;
+int melhorBonus = -1;
 
 void backtraking(Container container)
 {
@@ -60,11 +61,14 @@ bool accept(Container container, int *caminho, int size)
     for (size_t i = 1; i < size; i++)
     {
         valorDoCaminho += container.matrizAdjacente[caminho[i-1]][caminho[i]];
-        cotaDoCaminho += container.bonus[i];
+        //So soma o bonus quando sai da cidade
+        cotaDoCaminho += container.bonus[caminho[i-1]];
     }
 
     //Voltar para o node Inicial
     valorDoCaminho += container.matrizAdjacente[caminho[size-1]][caminho[0]];
+    //adicionando o ultimo bonus da cidade que vai para o inicio
+    cotaDoCaminho += container.bonus[caminho[size-1]];
 
     if (cotaDoCaminho >= container.cotaMinima)
     {
@@ -79,6 +83,7 @@ bool accept(Container container, int *caminho, int size)
             best[size] = 0;
             sizeMelhorCaminho = size+1;
             caminhoIdeal = best;
+            melhorBonus = cotaDoCaminho;
         }
 
         return true;
@@ -197,7 +202,8 @@ int *next(Container container, int *caminho)
 
 
 void printOutput(Container container){
-    std::cout << "Melhor Caminho: valor [" << valorDoMelhorCaminho << "] : [ ";
+    std::cout << "Melhor Caminho: valor [" << valorDoMelhorCaminho << "] | Bonus ["
+                << melhorBonus << "] | Caminho : [ ";
     for (size_t i = 0; i < sizeMelhorCaminho; i++)
     {
         std::cout << caminhoIdeal[i] << " ";
