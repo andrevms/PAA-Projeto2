@@ -1,6 +1,6 @@
 #include "backtraking.hpp"
 
-int* caminhoIdeal;
+int* caminhoIdeal = nullptr;
 int valorDoMelhorCaminho = -1;
 int sizeMelhorCaminho = -1;
 int melhorBonus = -1;
@@ -75,14 +75,19 @@ bool accept(Container container, int *caminho, int size)
         if (valorDoMelhorCaminho < 0 || valorDoMelhorCaminho > valorDoCaminho)
         {
             valorDoMelhorCaminho = valorDoCaminho;
-            int* best = new int[size+1];
+
+            if (caminhoIdeal != nullptr)
+            {
+                delete[] caminhoIdeal;
+            }
+            
+            caminhoIdeal = new int[size+1];
             for (size_t i = 0; i < size; i++)
             {
-                best[i] = caminho[i];
+                caminhoIdeal[i] = caminho[i];
             }
-            best[size] = 0;
+            caminhoIdeal[size] = 0;
             sizeMelhorCaminho = size+1;
-            caminhoIdeal = best;
             melhorBonus = cotaDoCaminho;
         }
 
@@ -103,6 +108,7 @@ int *first(Container container, int *caminho, int size)
     //Caso seja o root
     if(size == 0) {
         entradas[0] = 0;
+        delete[] caminho;
         return entradas;
     }
 
@@ -115,18 +121,31 @@ int *first(Container container, int *caminho, int size)
     }
 
     //Proxima entrada recebe o valor do primeiro numero disponivel varendo da esquerda para direita
+    int flag = -1;
     for (size_t i = 0; i < container.numCidades; i++)
     {
         if (entradas[i] == -1)
         {
-            int *novoCaminho = new int[container.numCidades];
-            for (size_t j = 0; j < container.numCidades; j++){ novoCaminho[j] = caminho[j]; }
-            novoCaminho[size] = i;
-            return novoCaminho;
+            flag = i;
+            break;
         }
     }
 
+    delete[] entradas;
+
+    if (flag != -1)
+    {
+        int *novoCaminho = new int[container.numCidades];
+        for (size_t j = 0; j < container.numCidades; j++){ novoCaminho[j] = caminho[j]; }
+        novoCaminho[size] = flag;
+
+        caminho = nullptr;
+        delete caminho;
+        return novoCaminho;
+    }
+    
     //Se não encontrar nenhuma entrada a direita retorna nullptr
+    delete[] caminho;
     return nullptr;
 }
 
@@ -148,16 +167,19 @@ int *next(Container container, int *caminho)
 
     //Como é caixeiro viajante sempre se inicia no 0
     if(size == 1) {
+        delete[] caminho;
         return nullptr;
     }
 
     //Caso em que não tem mais next
     if(size == container.numCidades ) {
+        delete[] caminho;
         return nullptr;
     }
 
     //Caso em que não tem mais next
     if(caminho[size-1] == container.numCidades-1) {
+        delete[] caminho;
         return nullptr;
     }
 
@@ -184,6 +206,8 @@ int *next(Container container, int *caminho)
 
     if (ultimoElemento == container.numCidades)
     {
+        delete[] entradas;
+        delete[] caminho;
         return nullptr;
     }
     
@@ -197,6 +221,8 @@ int *next(Container container, int *caminho)
 
     novoCaminho[size-1] = ultimoElemento;
 
+    delete[] entradas;
+    delete[] caminho;
     return novoCaminho;
 }
 
