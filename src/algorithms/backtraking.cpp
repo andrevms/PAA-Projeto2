@@ -50,12 +50,16 @@ void backtraking(Container container, int *caminho)
 
 bool accept(Container container, int *caminho, int size)
 {
-
+    if (size == 0 || size == 1)
+    {
+        return false;
+    }
+    
     int cotaDoCaminho = 0;
     int valorDoCaminho = 0;
-    for (size_t i = 0; i < size; i++)
+    for (size_t i = 1; i < size; i++)
     {
-        valorDoCaminho += container.matrizAdjacente[caminho[i]][caminho[i+1]];
+        valorDoCaminho += container.matrizAdjacente[caminho[i-1]][caminho[i]];
         cotaDoCaminho += container.bonus[i];
     }
 
@@ -77,8 +81,6 @@ bool accept(Container container, int *caminho, int size)
             caminhoIdeal = best;
         }
 
-        
-        
         return true;
     }
 
