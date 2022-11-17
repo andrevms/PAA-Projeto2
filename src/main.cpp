@@ -6,20 +6,25 @@
 #include "shortestPath.hpp"
 #include "shortestPathTest.hpp"
 #include "backtraking.hpp"
+#include "grasp.hpp"
+#include "container.hpp"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
+
+  srand (time(NULL));
   auto start = chrono::steady_clock::now();
   Container a = Container();
   a.loadInfo(argv[1]);
   a.imprimir();
 
-  backtraking(a);
+  //backtraking(a);
+  grasp(a, 5);
 
   auto end = chrono::steady_clock::now();
-  printOutput(a);
+  //printOutput(a);
 
    cout << "Elapsed time in nanoseconds: "
         << chrono::duration_cast<chrono::nanoseconds>(end - start).count()
@@ -37,7 +42,13 @@ int main(int argc, char *argv[])
         << chrono::duration_cast<chrono::seconds>(end - start).count()
         << " sec\n";
 
-  
+  deleteGRASP();
+  for (size_t i = 0; i < a.numCidades; i++)
+  {
+    delete[] a.matrizAdjacente[i];
+  }
+  delete[] a.matrizAdjacente;
+  delete[] a.bonus;
   
   //ShortestPathTest a = ShortestPathTest();
   //a.shortestPathComMatriz5x5();

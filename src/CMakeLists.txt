@@ -13,7 +13,8 @@ add_executable(
     utils/container.cpp utils/container.hpp
     algorithms/shortestPath.cpp algorithms/shortestPath.hpp
     algorithms/backtraking.cpp algorithms/backtraking.hpp
-    
+    algorithms/grasp.cpp algorithms/grasp.hpp
+
     testCases/shortestPathTest.cpp testCases/shortestPathTest.hpp
     main.cpp
 )
