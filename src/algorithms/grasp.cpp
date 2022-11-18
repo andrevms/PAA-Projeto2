@@ -1,7 +1,7 @@
 #include "grasp.hpp"
 
 int *bestPath = nullptr;
-int valBestPath = -1;
+int valBestPath = 999999999;
 int sizeBestPath = -1;
 int bestBonus = -1;
 
@@ -16,7 +16,7 @@ void grasp(Container container, int numIteractions)
     {
         initGreedySolution(container);
         //print path
-            //for (size_t i = 0; i < sizePathGreedy; i++){std::cout << pathGreedy[i] << " ";}std::cout << " \n";
+            for (size_t i = 0; i < sizePathGreedy; i++){std::cout << pathGreedy[i] << " ";}std::cout << " \n";
         
         localSearch2opt(pathGreedy);
 
@@ -39,7 +39,6 @@ void initGreedySolution(Container container)
 {
     //inicia o caminho com tamanho maximo
     int* path = new int[container.numCidades+1];
-    int valPath = 0;
     int valSize = 0;
     int bonus = 0;
 
@@ -48,7 +47,7 @@ void initGreedySolution(Container container)
     for (size_t i = 1; i < container.numCidades; i++) { bonusArray[i-1] = container.bonus[i]; }
     //print array 
         //for (size_t i = 0; i < container.numCidades-1; i++){std::cout << bonusArray[i] << " ";}std::cout << " \n";
-        
+    
     //array com entradas possiveis
     int* arrayNodesPossiveis = new int[container.numCidades-1];
     for (size_t i = 1; i < container.numCidades; i++) { arrayNodesPossiveis[i-1] = i; }
@@ -61,38 +60,44 @@ void initGreedySolution(Container container)
     valSize++; // Adicionando +1 ao size do path
     bonus += container.bonus[0]; // Adicionando o bonus do node 0;
 
-    do
+    while (bonus <= container.cotaMinima)
     {
         int numNodePossiveis = container.numCidades - valSize;
-        std::cout << "NumNodePossiveis : " << numNodePossiveis << "\n";
-        if (numNodePossiveis == 0)
-        {
-            break;
-        }
-          
         int randMax = somaValoresDoArray(bonusArray, 0, numNodePossiveis);
-        std::cout << "MAXRAND : " << randMax << "\n";
-        
         int randNumber = rand()%randMax;
-        std::cout << "randNumber : " << randNumber << "\n";
-        
         int posicao = selectNodeFromIntervalo(randNumber, arrayNodesPossiveis, numNodePossiveis, bonusArray);
+
+        /*
+        std::cout << "NumNodePossiveis : " << numNodePossiveis << "\n";
+        std::cout << "MAXRAND : " << randMax << "\n";
+        std::cout << "randNumber : " << randNumber << "\n";
         std::cout << "posicao : " << posicao << "\n";
+        for (size_t i = 0; i < numNodePossiveis; i++){std::cout << bonusArray[i] << " ";}std::cout << " \n";
+        for (size_t i = 0; i < numNodePossiveis; i++){std::cout << arrayNodesPossiveis[i] << " ";}std::cout << " \n";
+        */
 
-        bonus += bonusArray[posicao];
         path[valSize] = arrayNodesPossiveis[posicao];
-        arrayNodesPossiveis[posicao] = arrayNodesPossiveis[numNodePossiveis];
-        bonusArray[posicao] = bonusArray[numNodePossiveis];
+        bonus += bonusArray[posicao];
+        arrayNodesPossiveis[posicao] = arrayNodesPossiveis[numNodePossiveis-1];
+        bonusArray[posicao] = bonusArray[numNodePossiveis-1];
         valSize++;
-
+        
+        /*
         std::cout << "Bonus : " << bonus << "\n";
-    } while (bonus <= container.cotaMinima);
-    
-    path[valSize+1] = 0;
+        for (size_t i = 0; i < valSize; i++){std::cout << path[i] << " ";}std::cout << " \n";
+        std::cout << " \n";
+        std::cout << " \n";*/
+        
+    }
 
+    path[valSize] = 0;
+    valSize++;
+    //for (size_t i = 0; i < valSize+1; i++){std::cout << path[i] << " ";}std::cout << " \n";
+    //std::cout << "valSize : " <<  valSize<< "\n";
+    
     if (pathGreedy != nullptr) { delete[] pathGreedy; }
     pathGreedy = path;
-    valPathGreedy = valPath;
+    valPathGreedy = valPath(path, valSize,container);
     sizePathGreedy = valSize;
     bonusPathGreedy = bonus;
 
@@ -120,6 +125,15 @@ void deleteGRASP() {
     delete[] pathGreedy;
 }
 
+int valPath(int* array, int size, Container container) {
+    int val = 0;
+    for (size_t i = 1; i < size; i++)
+    {
+        val += container.matrizAdjacente[array[i-1]][array[i]];
+    }
+    return val;
+}
+
 int somaValoresDoArray(int* array, int inicio, int fim) {
     int val = 0;
     for (size_t i = inicio; i < fim; i++)
@@ -136,18 +150,21 @@ int selectNodeFromIntervalo(int valRecebido, int* array, int size, int* bonus) {
     {
         arrayIntervalos[i] = arrayIntervalos[i-1] + bonus[i];
     }
-
+    
+    /*std::cout <<"Intervalos\n";
     for (size_t i = 0; i < size; i++)
     {
         std::cout << arrayIntervalos[i]<< " ";
     }
 
-    std::cout <<"\n";
-    
+    std::cout <<"\n";*/
+
+
     int posicao = 0;
     while(valRecebido > arrayIntervalos[posicao]) {
         posicao++;
     }
     
+    delete[] arrayIntervalos;
     return posicao;
 }

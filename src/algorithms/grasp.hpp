@@ -11,4 +11,5 @@ void outputGRASP();
 void deleteGRASP();
 int somaValoresDoArray(int* array, int inicio, int fim);
 int selectNodeFromIntervalo(int valRecebido, int* array, int size, int* bonus);
+int valPath(int* array, int size, Container container);
 #endif
