@@ -18,10 +18,10 @@ int main(int argc, char *argv[])
   auto start = chrono::steady_clock::now();
   Container a = Container();
   a.loadInfo(argv[1]);
-  a.imprimir();
+  //a.imprimir();
 
   //backtraking(a);
-  grasp(a, 5);
+  grasp(a, 200);
 
   auto end = chrono::steady_clock::now();
   //printOutput(a);
@@ -30,17 +30,17 @@ int main(int argc, char *argv[])
         << chrono::duration_cast<chrono::nanoseconds>(end - start).count()
         << " ns" << endl;
  
-    cout << "Elapsed time in microseconds: "
-        << chrono::duration_cast<chrono::microseconds>(end - start).count()
-        << " µs" << endl;
+    //cout << "Elapsed time in microseconds: "
+        //<< chrono::duration_cast<chrono::microseconds>(end - start).count()
+        //<< " µs" << endl;
  
-    cout << "Elapsed time in milliseconds: "
-        << chrono::duration_cast<chrono::milliseconds>(end - start).count()
-        << " ms" << endl;
+    //cout << "Elapsed time in milliseconds: "
+        //<< chrono::duration_cast<chrono::milliseconds>(end - start).count()
+        //<< " ms" << endl;
  
-    cout << "Elapsed time in seconds: "
-        << chrono::duration_cast<chrono::seconds>(end - start).count()
-        << " sec\n";
+    //cout << "Elapsed time in seconds: "
+        //<< chrono::duration_cast<chrono::seconds>(end - start).count()
+        //<< " sec\n";
 
   deleteGRASP();
   for (size_t i = 0; i < a.numCidades; i++)

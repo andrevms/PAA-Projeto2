@@ -16,10 +16,15 @@ void grasp(Container container, int numIteractions)
     {
         initGreedySolution(container);
         //print path
-            for (size_t i = 0; i < sizePathGreedy; i++){std::cout << pathGreedy[i] << " ";}std::cout << " \n";
+            //std::cout << "init Path : ";
+            //for (size_t i = 0; i < sizePathGreedy; i++){std::cout << pathGreedy[i] << " ";}std::cout << " \n";
+            //std::cout << "size " << sizePathGreedy << " valPath " << valPathGreedy << " bonus " << bonusPathGreedy << "\n";
         
-        localSearch2opt(pathGreedy);
-
+        localSearch2opt(pathGreedy, sizePathGreedy ,container);
+            //std::cout << "after 2opt : ";
+            //for (size_t i = 0; i < sizePathGreedy; i++){std::cout << pathGreedy[i] << " ";}std::cout << " \n";
+            //std::cout << "size " << sizePathGreedy << " valPath " << valPathGreedy << " bonus " << bonusPathGreedy << "\n\n";
+        
         if (valBestPath > valPathGreedy)
         {
             delete[] bestPath;
@@ -30,9 +35,14 @@ void grasp(Container container, int numIteractions)
                 bestPath[i] = pathGreedy[i];
             }
             sizeBestPath = sizePathGreedy;
+            valBestPath = valPathGreedy;
             bestBonus = bonusPathGreedy;
         }
     }
+
+    std::cout << "Gbest : ";
+            for (size_t i = 0; i < sizeBestPath; i++){std::cout << bestPath[i] << " ";}std::cout << " \n";
+            std::cout << "size " << sizeBestPath << " valPath " << valBestPath << " bonus " << bestBonus << "\n\n";
 }
 
 void initGreedySolution(Container container)
@@ -105,8 +115,87 @@ void initGreedySolution(Container container)
     delete[] arrayNodesPossiveis;
 }
 
-void localSearch2opt(int *path)
-{
+void localSearch2opt(int *path, int size, Container container)
+{ 
+    int* oldPath = new int[size];
+    for (size_t i = 0; i < size; i++)
+    {
+        oldPath[i]= path[i];
+    }
+    
+    int numNodeSwap = size-1;
+
+    int improvement = 0;
+    do 
+    {
+        improvement = 0;
+
+        for (int i = 1; i < size; i++) {
+            for (int j = i + 1; j < numNodeSwap; j++) {
+                //Nova rota
+                int* newRoute = swap2opt(oldPath, size, i, j);
+                //Valor do path
+                int newRouteTotalValue = valPath(newRoute, size, container);
+                int newRouteBonus = valPathBonus(newRoute, size, container);
+
+                //Condição de melhoria
+                if(newRouteTotalValue < valPathGreedy)
+                { 
+                    delete[] oldPath;
+                    oldPath = new int[size];
+                    for (size_t i = 0; i < size; i++)
+                    {
+                        oldPath[i] = newRoute[i];
+                    }
+                    
+                    delete[] newRoute;
+
+                    valPathGreedy = newRouteTotalValue;
+                    improvement = 1;
+                    
+                    break;
+                }
+
+                delete[] newRoute;
+                    
+            }
+
+            if(improvement == 1){
+                break;
+            }
+        }
+    } while(improvement == 1);
+
+
+    delete[] pathGreedy;
+    pathGreedy = new int[size];
+    for (size_t i = 0; i < size; i++)
+    {
+        pathGreedy[i] = oldPath[i];
+    }
+    delete[] oldPath;
+    
+}
+
+int* swap2opt(int* path, int pathSize, int swapBegin, int swapEnd) {
+    int* newPath = new int[pathSize];
+
+    for (size_t i = 0; i < swapBegin; i++)
+    {
+        newPath[i] = path[i];
+    }
+    for (size_t i = swapBegin, y = 0; i <= swapEnd; i++, y++)
+    {
+        newPath[i] = path[swapEnd - y];
+        //printf("s%d ", newRoute[i]);
+    }
+
+    for (size_t i = swapEnd+1; i < pathSize; i++)
+    {
+        newPath[i] = path[i];
+    }
+
+    return newPath;
 }
 
 void outputGRASP()
@@ -132,6 +221,15 @@ int valPath(int* array, int size, Container container) {
         val += container.matrizAdjacente[array[i-1]][array[i]];
     }
     return val;
+}
+
+int valPathBonus(int* array, int size, Container container) {
+    int bonus = 0;
+    for (size_t i = 0; i < size; i++)
+    {
+        bonus += container.bonus[array[i]];
+    }
+    return bonus;
 }
 
 int somaValoresDoArray(int* array, int inicio, int fim) {
